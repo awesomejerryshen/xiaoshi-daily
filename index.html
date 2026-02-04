@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>曉事日報 | 每天一件小事，看看大家怎麼想</title>
+    <meta name="description" content="曉事日報 - 一份每天早晚各寄一次的 AI 日報。早上提出一件小事，晚上整理大家對這件事的看法。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #fafafa;
+            color: #2d3436;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px 24px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 100%;
+            background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+            z-index: -1;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: 0.05em;
+        }
+
+        .tagline {
+            font-size: 20px;
+            font-weight: 300;
+            color: #636e72;
+            margin-bottom: 48px;
+        }
+
+        .cta-button {
+            background-color: #2d3436;
+            color: white;
+            padding: 16px 48px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background-color: #1a1d1e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(45, 52, 54, 0.3);
+        }
+
+        .hero-note {
+            margin-top: 32px;
+            font-size: 14px;
+            color: #b2bec3;
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 56px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background-color: #2d3436;
+            margin: 24px auto 0;
+        }
+
+        /* What & Why Section */
+        .concept-box {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .concept-box h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #2d3436;
+        }
+
+        .concept-box p {
+            color: #636e72;
+            font-weight: 300;
+        }
+
+        .what-it-is-not {
+            margin-top: 40px;
+        }
+
+        .not-list, .is-list {
+            list-style: none;
+            margin: 24px 0;
+        }
+
+        .not-list li, .is-list li {
+            padding: 12px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .not-list li::before, .is-list li::before {
+            margin-right: 12px;
+            font-weight: bold;
+        }
+
+        .not-list li::before {
+            color: #d63031;
+            content: '✗';
+        }
+
+        .is-list li::before {
+            color: #00b894;
+            content: '✓';
+        }
+
+        /* How It Works */
+        .step {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: #2d3436;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: 600;
+            margin-right: 16px;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        .step-content {
+            padding-left: 56px;
+            color: #636e72;
+        }
+
+        .example-box {
+            background-color: #f5f6fa;
+            border-left: 3px solid #2d3436;
+            padding: 24px;
+            margin-top: 24px;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        /* AI Editor Section */
+        .ai-editor {
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 56px 40px;
+            text-align: center;
+        }
+
+        .ai-editor h2 {
+            font-size: 28px;
+            margin-bottom: 24px;
+        }
+
+        .ai-editor p {
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .traits {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .trait {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        /* Questions Section */
+        .question-types {
+            display: grid;
+            gap: 16px;
+        }
+
+        .question-type {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border-left: 4px solid #2d3436;
+        }
+
+        .question-type h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .question-type p {
+            font-size: 14px;
+            color: #636e72;
+            font-weight: 300;
+        }
+
+        /* Who For Section */
+        .who-for {
+            text-align: center;
+        }
+
+        .who-for-list {
+            list-style: none;
+            display: inline-block;
+            text-align: left;
+            margin-top: 32px;
+        }
+
+        .who-for-list li {
+            padding: 16px 24px;
+            background: white;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            display: flex;
+            align-items: center;
+        }
+
+        .who-for-list li::before {
+            content: '→';
+            margin-right: 16px;
+            color: #2d3436;
+            font-weight: 600;
+        }
+
+        /* Pricing */
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 48px;
+            text-align: center;
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.06);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .price {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 24px 0;
+            color: #2d3436;
+        }
+
+        .price span {
+            font-size: 16px;
+            font-weight: 300;
+            color: #636e72;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 56px 24px;
+            background-color: #2d3436;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            margin: 0 16px;
+            transition: opacity 0.3s ease;
+        }
+
+        footer a:hover {
+            opacity: 1;
+        }
+
+        .footer-note {
+            margin-top: 24px;
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        /* Coming Soon Badge */
+        .coming-soon {
+            display: inline-block;
+            background-color: #fdcb6e;
+            color: #2d3436;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .logo {
+                font-size: 36px;
+            }
+
+            .tagline {
+                font-size: 16px;
+            }
+
+            .concept-box, .step {
+                padding: 24px;
+            }
+
+            .step-content {
+                padding-left: 0;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .ai-editor {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <span class="coming-soon">即將推出</span>
+        <div class="logo">曉事日報</div>
+        <p class="tagline">每天一件小事，看看大家怎麼想</p>
+        <a href="#subscribe" class="cta-button">訂閱電子報</a>
+        <p class="hero-note">每天早晚各寄一次，讓你看看自己站在哪裡</p>
+    </section>
+
+    <!-- Why Section -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">為什麼是曉事日報？</h2>
+
+            <div class="concept-box">
+                <h3>企劃緣起</h3>
+                <p>
+                    在資訊密度過高、立場快速分裂的時代，<br>
+                    多數媒體關心的是「發生了什麼」與「你應該怎麼想」。<br><br>
+                    《曉事日報》選擇一條不同的路：<br>
+                    我們不報大事，只記小事。<br>
+                    不下判斷，只整理觀點。<br><br>
+                    我們相信，人們真正需要的不是更多結論，<br>
+                    而是一面能夠看見「自己在群體中的位置」的鏡子。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Section -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">曉事日報是什麼？</h2>
+
+            <div class="concept-box">
+                <h3>一句話定義</h3>
+                <p>一份每天早晚各寄一次的 AI 日報，早上提出一件小事，晚上整理大家對這件事的看法。</p>
+            </div>
+
+            <div class="what-it-is-not">
+                <h3 style="text-align: center; margin-bottom: 16px;">曉事日報不是什麼？</h3>
+                <ul class="not-list" style="max-width: 400px; margin: 24px auto;">
+                    <li>不是新聞媒體</li>
+                    <li>不是輿論引導</li>
+                    <li>不是心理諮商</li>
+                    <li>不是社群吵架場</li>
+                </ul>
+
+                <h3 style="text-align: center; margin-bottom: 16px; margin-top: 40px;">曉事日報是什麼？</h3>
+                <ul class="is-list" style="max-width: 400px; margin: 24px auto;">
+                    <li>一個觀點收集器</li>
+                    <li>一個群體情緒切片</li>
+                    <li>一個不要求表現、只要求真實的回覆空間</li>
+                    <li>一份「今天大家怎麼想」的紀錄</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">運作方式</h2>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <span class="step-title">早報｜今日一件曉事</span>
+                <div class="step-content">
+                    <p>每天早上 10:00，我們會寄送一件小事，包含三個元素：</p>
+                    <ul style="list-style: none; margin-top: 16px;">
+                        <li>• 一件小事（事件描述）</li>
+                        <li>• 一個開放式問題</li>
+                        <li>• 一句說明：請用一句話回覆即可</li>
+                    </ul>
+
+                    <div class="example-box">
+                        📰 曉事日報｜今日一件小事<br><br>
+                        事件：<br>
+                        台鐵臨時延誤了 10 分鐘。<br><br>
+                        問題：<br>
+                        這種時候，你心裡第一個念頭通常是什麼？<br><br>
+                        請直接回覆一句話即可。
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <span class="step-title">你回覆</span>
+                <div class="step-content">
+                    <p>回覆規則很簡單：</p>
+                    <ul style="list-style: none; margin-top: 16px;">
+                        <li>• 一人一句話（不鼓勵長篇）</li>
+                        <li>• 不需署名（可選匿名或暱稱）</li>
+                        <li>• 不評分、不排名</li>
+                        <li>• 不對個別回覆做評論</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-title">晚報｜今日觀點整理</span>
+                <div class="step-content">
+                    <p>每天晚上 21:00，AI 編輯只做「整理」，不做「判斷」。</p>
+
+                    <div class="example-box">
+                        📰 曉事日報｜今日觀點整理<br><br>
+                        今天這件小事，共收到 148 則回覆。<br><br>
+                        主要分成四種反應：<br><br>
+                        ① 無奈接受型（41%）<br>
+                        「反正也不是第一次了。」<br><br>
+                        ② 焦躁責怪型（29%）<br>
+                        「為什麼永遠都沒改善？」<br><br>
+                        ③ 自我調整型（20%）<br>
+                        「那我就改路線或提早出門。」<br><br>
+                        ④ 情緒外包型（10%）<br>
+                        「立刻傳訊息跟朋友抱怨。」<br><br>
+                        今日的群體狀態關鍵字是：<br>
+                        「被打亂，但仍在運作。」<br><br>
+                        以上是今天的樣子。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Editor Section -->
+    <section>
+        <div class="container">
+            <div class="ai-editor">
+                <h2>AI 總編輯角色設定</h2>
+                <p>曉事日報的 AI 總編輯不是人格角色，而是一個「編輯位置」。</p>
+                <div class="traits">
+                    <span class="trait">中性</span>
+                    <span class="trait">冷靜</span>
+                    <span class="trait">不站邊</span>
+                    <span class="trait">不鼓勵</span>
+                    <span class="trait">不安慰</span>
+                    <span class="trait">不建議</span>
+                </div>
+                <p style="margin-top: 32px; font-size: 14px; opacity: 0.7;">
+                    只整理，不評價<br>
+                    只命名，不說服<br>
+                    只呈現分布，不說哪個好
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Strategy -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">問題設計方向</h2>
+            <p style="text-align: center; color: #636e72; margin-bottom: 32px;">
+                《曉事日報》的問題永遠圍繞「小、真、可分歧」
+            </p>
+
+            <div class="question-types">
+                <div class="question-type">
+                    <h4>被打斷的日常</h4>
+                    <p>行程延誤、計畫變動、突發通知</p>
+                </div>
+                <div class="question-type">
+                    <h4>模糊的不舒服</h4>
+                    <p>說不出口的不滿、輕微但持續的壓力</p>
+                </div>
+                <div class="question-type">
+                    <h4>價值取捨瞬間</h4>
+                    <p>為了方便、安全、關係而犧牲了什麼</p>
+                </div>
+                <div class="question-type">
+                    <h4>他人引發的反應</h4>
+                    <p>別人的一句話或行為帶來的心理反應</p>
+                </div>
+                <div class="question-type">
+                    <h4>重複出現的小事</h4>
+                    <p>最近常發生、但說不上來的重要小事</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who For Section -->
+    <section>
+        <div class="container who-for">
+            <h2 class="section-title">適合誰？</h2>
+            <ul class="who-for-list">
+                <li>不想被教導的人</li>
+                <li>不想被激勵或分析過頭的人</li>
+                <li>對日常感受敏感，但不愛發文的人</li>
+                <li>想知道「原來大家也會這樣想」的人</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="subscribe">
+        <div class="container">
+            <h2 class="section-title">訂閱方式</h2>
+            <div class="pricing-card">
+                <h3>定價概念</h3>
+                <div class="price">一杯咖啡的價格 <span>/ 每月</span></div>
+                <p style="color: #636e72; margin-bottom: 24px;">
+                    低價、低頻、長期訂閱<br>
+                    核心價值不在功能，而在「持續陪伴感」
+                </p>
+                <a href="#" class="cta-button" style="opacity: 0.5; cursor: not-allowed;">
+                    即將開放訂閱
+                </a>
+                <p style="margin-top: 16px; font-size: 12px; color: #b2bec3;">
+                    目前仍在準備階段，敬請期待
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <h3 style="margin-bottom: 24px; color: white;">曉事日報</h3>
+            <p>每天一件小事，看看大家怎麼想</p>
+            <div style="margin-top: 32px;">
+                <a href="#">關於我們</a>
+                <a href="#">聯絡方式</a>
+                <a href="#">隱私政策</a>
+            </div>
+            <p class="footer-note">
+                © 2026 曉事日報. All rights reserved.<br>
+                Made with ❤️ in Taiwan
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
